@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>雙北貓咪咖啡地圖</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+ 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+ 
+    <script type="text/javascript" src="map.js"></script>
+     
+    <script type="text/javascript">
+ 
+        var catmap
+        var markers = L.markerClusterGroup();
+        var caticon = L.icon(
+            {iconUrl: './images/cat.png',
+	         iconSize: [45, 45],
+            });
+        var coordinate = L.popup();
+        
+        function initialize() {
+            catmap = L.map('map').setView([25.03, 121.6], 11);
+            L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    minZoom: 0, 
+                    maxZoom: 16
+                }
+            ).addTo(catmap);
+            
+ 
+            for(var idx in cat_map){
+                if(cat_map[idx]['lat'] == undefined){
+                    continue;
+                }
+                var marker = L.marker(
+                    [cat_map[idx]['lat'], cat_map[idx]['lng']],
+                    {icon: caticon,
+                    opacity: 1.0
+                    }
+                )
+                marker.bindPopup(`<b>${cat_map[idx]['name']}</b><br>電話:${cat_map[idx]['phone']}<br>地址:${cat_map[idx]['address']}`).openPopup();
+                markers.addLayer(marker);
+            }
+            catmap.addLayer(markers);
+
+        function MouseClick(e) {
+              var lat = e.latlng.lat; 
+              var lng = e.latlng.lng; 
+              coordinate
+                .setLatLng(e.latlng)
+                .setContent(`緯度：${lat}<br/>經度：${lng}`)
+                .openOn(catmap);
+            }
+            catmap.on('click', MouseClick);
+            
+        }
+    </script>
+</head>
+<body onload="initialize()">
+ 
+<h1 align="center" style="font-weight:bold">雙北貓咪咖啡廳地圖</h1> 
+<div id="map" style="height:800px"></div>
+ 
+</body></html>
