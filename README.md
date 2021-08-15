@@ -3,5 +3,5 @@
 
 練習串接 Leaflet api 及相關功能
 
-Demo:
+DEMO:
 https://xiang707.000webhostapp.com/CatCafeMap/catmap.html
